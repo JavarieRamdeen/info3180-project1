@@ -5,10 +5,16 @@ Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file creates your application.
 """
 
-from app import app
-from flask import render_template, request, redirect, url_for
+from fileinput import filename
+import psycopg2
+import os
+from app import app, db
+from app.forms import PropertyForm
+from app.models import properties
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
 
-
+UPLOAD_FOLDER = './info3180-project1/Images'
 ###
 # Routing for your application.
 ###
@@ -18,7 +24,35 @@ def home():
     """Render website's home page."""
     return render_template('home.html')
 
+app.config['UPLOAD_PATH'] = './Images'
+@app.route('/properties/create', methods=['GET', 'POST'])
+def create():
+    form = PropertyForm()
+    
+    if request.method == 'POST':
+        title = form.title.data
+        bedrooms = form.bedrooms.data
+        bathrooms = form.bathrooms.data
+        location = form.location.data
+        price = form.price.data
+        type = form.type.data
+        description = form.description.data
+        photo = form.photo.data
+        
+        print("Hi",photo.filename)
+        photo.save(os.path.join(app.config['UPLOAD_PATH'], photo.filename))
 
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO properties (title, bedrooms, bathrooms, location, price, type, description, photo)'
+        'VALUES (%s,%s,%s,%s,%s,%s,%s,%s);',
+        (title,bedrooms,bathrooms,location,price,type,description,photo.filename))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    return render_template("create.html", form=form,photo=photo)
+    
 @app.route('/about/')
 def about():
     """Render the website's about page."""
@@ -28,6 +62,13 @@ def about():
 ###
 # The functions below should be applicable to all Flask apps.
 ###
+def get_db_connection():
+    conn = psycopg2.connect(host='localhost',
+                            database='project1',
+                            user=os.environ['DB_USERNAME'],
+                            password=os.environ['DB_PASSWORD'])
+    return conn
+
 
 # Display Flask WTF errors as Flash messages
 def flash_errors(form):
