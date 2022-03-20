@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<div class="properties">
+    <h1>Properties</h1>
+    <hr>
+    <div class="property_cards">
+        {% for property in property %}
+        <div class="property_card">
+            <img class=img src="{{ url_for('static', filename='Images/'+property.photo)}}" alt="property_img">
+            <div class="list_body">
+                <p class="title">{{property.title}}</p>
+                <p>{{property.location}}</p>
+                <p class="price">${{property.price}}</p>
+            </div>
+            <div class="card_btn">
+            <a class=btn href="{{ url_for('property',property_id=property.property_id)}}">View Property</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

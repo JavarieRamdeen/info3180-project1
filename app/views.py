@@ -24,24 +24,24 @@ def home():
     """Render website's home page."""
     return render_template('home.html')
 
-app.config['UPLOAD_PATH'] = './Images'
+app.config['UPLOAD_PATH'] = './app/static/Images'
 @app.route('/properties/create', methods=['GET', 'POST'])
 def create():
     form = PropertyForm()
+
+    title = form.title.data
+    bedrooms = form.bedrooms.data
+    bathrooms = form.bathrooms.data
+    location = form.location.data
+    price = form.price.data
+    type = form.type.data
+    description = form.description.data
+    photo = form.photo.data
     
-    if request.method == 'POST':
-        title = form.title.data
-        bedrooms = form.bedrooms.data
-        bathrooms = form.bathrooms.data
-        location = form.location.data
-        price = form.price.data
-        type = form.type.data
-        description = form.description.data
-        photo = form.photo.data
-        
+    if request.method == 'POST':       
         print("Hi",photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_PATH'], photo.filename))
-
+ 
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute('INSERT INTO properties (title, bedrooms, bathrooms, location, price, type, description, photo)'
@@ -51,8 +51,21 @@ def create():
         cur.close()
         conn.close()
 
-    return render_template("create.html", form=form,photo=photo)
-    
+        property= properties.query
+        flash('Property was successfully added.', 'success')
+        return render_template('properties.html',property=property)
+    return render_template("create.html", form=form, photo=photo)
+
+@app.route('/properties', methods=['GET', 'POST'])
+def view_properties():
+    property= properties.query
+    return render_template('properties.html',property=property)
+
+@app.route('/properties/<property_id>', methods=['GET', 'POST'])
+def property(property_id):
+    property= properties.query.filter_by(property_id=property_id)
+    return render_template('property.html',property=property)
+
 @app.route('/about/')
 def about():
     """Render the website's about page."""

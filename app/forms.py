@@ -15,5 +15,5 @@ class PropertyForm(FlaskForm):
     title = StringField('Title',validators=[InputRequired()])
     description = TextAreaField('Description', validators=[InputRequired()])
     photo = FileField('Image', validators=[FileRequired(),FileAllowed(['jpg','png'], 'Images only!')])
-    submit = SubmitField("Send")
+    submit = SubmitField("Add Property")
 

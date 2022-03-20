@@ -5,44 +5,49 @@
     <h1>New Property</h1>
     <hr>
     <div class="form_container">
-        <p>Fill in this fform to contact the site owners</p>
         <form action="{{ url_for('create') }}" method="post" enctype="multipart/form-data">
             {{ form.csrf_token }}
+
+            {{ form.title.label }}
             <div class="form-floating">
               {{ form.title(placeholder="Title") }}
-              {{ form.title.label }}
             </div>
+
+            {{ form.bedrooms.label }}
             <div class="form-floating">
               {{ form.bedrooms(placeholder="Bedrooms") }}
-              {{ form.bedrooms.label }}
             </div>
+
+            {{ form.bathrooms.label }}
             <div class="form-floating">
-              {{form.bathrooms(placeholder="Bathrooms")}}
-              {{ form.bathrooms.label }}
+              {{ form.bathrooms(placeholder="Bathrooms") }}
             </div>
+
+            {{ form.location.label }}
             <div class="form-floating">
-              {{ form.location(placeholder="Location") }}
-              {{ form.location.label }}
+              {{ form.location(placeholder="Location") }} 
             </div>
+            
+            {{ form.price.label }}
             <div class="form-floating">
               {{ form.price(placeholder="Price") }}
-              {{ form.price.label }}
             </div>
+
+            {{ form.type.label }}
             <div class="form-floating">
-              {{ form.type(placeholder="Type") }}
-              {{ form.type.label }}
+              {{ form.type(placeholder="Type") }}  
             </div>
+
+            {{ form.description.label }}
             <div class="form-floating">
               {{ form.description(placeholder="description") }}
-              {{ form.description.label }}
             </div>
+
+            {{ form.photo.label }}
             <div class="form-floating">
               {{ form.photo }}
-              {{ form.photo.label }}
             </div>
-            <div class="form-group">
               {{ form.submit }}
-            </div>
           </form>
     </div>
 </div>

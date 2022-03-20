@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="p_card">
+    {% for property in property %}
+    <div class=img_p>
+        <img class=img1 src="{{ url_for('static', filename='Images/'+property.photo)}}" alt="property_img">
+    </div>
+    <div class="info">
+        <p class="title">{{property.title}}</p>
+        <div class="p_section">
+            <p>${{property.price}}</p>
+            <p>{{property.type}}</p>
+        </div>
+        <p>{{property.description}}</p>
+        <p>bedrooms: {{property.bedrooms}}</p>
+        <p>bathrooms: {{property.bathrooms}}</p>
+        <p>Location: {{property.location}}</p>
+        <div class="card_btn">
+            <a class=btn>Email Realtor</a>
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
